@@ -1,32 +1,74 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <div class="close-nav" @click="smallNav">
+      <i class="fas fa-bars fa-2x"></i>
     </div>
-    <router-view />
+    <linksSmallScreen v-if="isNav"></linksSmallScreen>
+    <transition name="fade" mode="out-in">
+      <router-view />
+    </transition>
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script>
+import linksSmallScreen from "../src/components/Global/LinksSmallScreen.vue";
+
+export default {
+  name: "App",
+  components: {
+    linksSmallScreen,
+  },
+  data() {
+    return {
+      isNav: false
+    };
+  },
+  methods: {
+    smallNav() {
+      this.isNav = !this.isNav;
+    }
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition-duration: 0.3s;
+  transition-property: opacity;
+  transition-timing-function: ease;
 }
 
-#nav {
-  padding: 30px;
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}
+#app {
+  font-family: "Open Sans", sans-serif !important;
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+  .close-nav {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    z-index: 1000;
+    cursor: pointer;
+    display: none;
 
-    &.router-link-exact-active {
-      color: #42b983;
+    opacity: 0.5;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      opacity: 1;
     }
+
+    @media (max-width: 991px) {
+      display: block;
+    }
+  }
+}
+#nav {
+  @media (max-width: 991px) {
+    display: none;
   }
 }
 </style>
